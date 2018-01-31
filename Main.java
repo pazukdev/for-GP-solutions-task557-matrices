@@ -8,9 +8,21 @@ import java.util.Scanner;
 /**
  * Created by Pazuk on 28.01.2018.
  */
+
+// Main idea:
+// Step 1. Get all values from input file and according with it build array with numbers for matrices
+// Step 2.
+// Loop iteration:
+// - get numbers from array and create next matrix array
+// - multiply actual matrix with next matrix, get result matrix
+// - mark result matrix as actual matrix
+// Next iteration...
+// Step 3. After last iteration, get from result matrix requested number (positions specified in input file)
+
+
 public class Main {
 
-    //static ArrayList<Integer> list;
+
     static int[] list;
 
     static boolean fileCheckOk;
@@ -25,7 +37,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
         readFile();
-        //printGeneralInputValues();
         if(fileCheckOk){
             calculate();
 
@@ -33,88 +44,72 @@ public class Main {
             writer.print(matrixA[a-1][b-1]);
             writer.close();
         }
-
     }
 
-
-
     static void readFile() throws FileNotFoundException {
-        //list=new ArrayList<>();
 
         File file=new File("input.txt");
         Scanner scanner=new Scanner(file);
 
-        m=scanner.nextInt();
-        n=scanner.nextInt();
-        a=scanner.nextInt();
-        b=scanner.nextInt();
-        p=scanner.nextInt();
+        //general input values:
+        m=scanner.nextInt(); // number of matricis
+        n=scanner.nextInt(); // matrices size
+        a=scanner.nextInt(); // position i of requested number
+        b=scanner.nextInt(); // position j of requested number
+        p=scanner.nextInt(); // number, by modulo of what all the mathematic operations are processing
 
-        list=new int[m*n*n];
+        list=new int[m*n*n]; // array length according with quantity of matricis and their size
         int i=0;
         while(scanner.hasNextInt()){
-            //list.add(scanner.nextInt());
             list[i]=scanner.nextInt();
             i++;
         }
         scanner.close();
-        //System.out.println(list);
-        //System.out.println(Arrays.toString(list));
-        //System.out.println();
 
-        //m =list.get(0);
-        //n =list.get(1);
-        //a=list.get(2);
-        //b=list.get(3);
-        //p=list.get(4);
-        //System.out.println(p);
         if(m>=1 && m<=130 && n>=1 && n<=130 && a>=1 && a<=n && b>=1 && b<=n && p<=10000 && p>=-10000){
-            fileCheckOk=true;
+            fileCheckOk=true; //check if input values are comply with task conditions
             p=Math.abs(p);
         }
-        //System.out.println(fileCheckOk);
-        //System.out.println(p);
     }
 
-    static void printGeneralInputValues(){
+    /*static void printGeneralInputValues(){
         System.out.print(m +" ");
         System.out.println(n +" ");
         System.out.print(a+" ");
         System.out.println(b+" ");
         System.out.println(p+" ");
         System.out.println();
-    }
+    }*/
 
-    static void calculate(){
+    static void calculate(){ // calculate matrices
 
         int i, j, k;
-        //int r=5;
         int r=0;
         int t;
         int temp;
-        matrixA=new int[n][n];
-        for(int n = 0; n< m; n++){
-            int[][] matrixB=new int[Main.n][Main.n];
+        matrixA=new int[n][n]; // actual matrix
+        for(int n = 0; n< m; n++){ // number of iterations==matrices quantity
+            int[][] matrixB=new int[Main.n][Main.n]; // next matrix
             for(i=0; i< Main.n; i++){
                 for(j=0; j< Main.n; j++){
-                    //matrixB[i][j]=list.get(r);
                     matrixB[i][j]=list[r];
                     r++;
                 }
             }
-            //printMatrix("B", matrixB);
 
             if(n>0){
-                int[][] matrixC=new int[Main.n][Main.n];
+                int[][] matrixC=new int[Main.n][Main.n]; //result matrix
                 for(i=0; i< Main.n; i++){
                     for(k=0; k< Main.n; k++){
                         t=matrixA[i][k];
                         for(j=0; j< Main.n; j++){
-                            temp=t*matrixB[k][j];
-                            if (temp>=p){
-                                temp=temp%p;
+                            temp=t*matrixB[k][j]; // multiplying...
+                            if (temp>=p){    // compare with number, by modulo of what all
+                                             // the mathematic operations are processing
+
+                                temp=temp%p; // and replace if need
                             }
-                            matrixC[i][j]=matrixC[i][j]+temp;
+                            matrixC[i][j]=matrixC[i][j]+temp; // ...matrces
                             if(matrixC[i][j]>=p){
                                 matrixC[i][j]=matrixC[i][j]%p;
                             }
@@ -128,17 +123,12 @@ public class Main {
                 matrixA=matrixB;
                 //printMatrix("A", matrixA);
             }
-
-
         }
-
-        //printMatrix("Result", matrixA);
-        //System.out.println(matrixA[a-1][b-1]);
     }
 
 
 
-    static void printMatrix(String text, int[][] matrix){
+    /*static void printMatrix(String text, int[][] matrix){
         if(text.equals("Result")){System.out.println("Matrix RESULT");}
         if(text.equals("A")){System.out.println("Matrix A");}
         if(text.equals("B")){System.out.println("Matrix B");}
@@ -151,6 +141,6 @@ public class Main {
             System.out.println();
         }
         System.out.println();
-    }
+    }*/
 
 }
